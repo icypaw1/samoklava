@@ -6,16 +6,26 @@ units:
 points:
   key:
     footprints:
-      choc:
+      choc_hotswap:
         type: choc
         params:
+          hotswap: true
           reverse: true
           keycaps: true
         nets:
           # from: P1
           # to: P2
-          from: =column_net
-          to: GND
+          from: =colrow
+          to: =column_net
+      diode:
+        type: diode
+        nets:
+          # from: P3
+          # to: P4
+          from: =colrow
+          to: =row_net
+        anchor:
+          shift: [0, -5]
   zones:
     matrix:
       # anchor:
@@ -57,11 +67,11 @@ points:
     thumbfan:
       anchor:
         ref: matrix_inner_bottom
-        shift: [-2.5 kx, -1 ky]
+        shift: [-1.5 kx, -1 ky]
       columns:
         near:
           spread: kx
-          rotate: -9
+          rotate: -15
           origin: [-0.5 kx, -0.5 ky]
           key:
             column_net: P18
@@ -73,8 +83,8 @@ points:
             column_net: P15
         far:
           spread: kx
-          rotate: -95
-          origin: [0.13 kx, -0.1 ky]
+          rotate: -15
+          origin: [-0.5 kx, -0.5 ky]
           key:
             column_net: P14
       rows:
@@ -249,6 +259,16 @@ pcbs:
       edge:
         outline: plate
         layer: Edge.Cuts
+    footprints:
+      jlc_order_number:
+        type: text
+        anchor:
+          ref:
+            - matrix_ring_home
+          shift: [-0.25 kx, 0.5 ky]
+        params:
+          text: "JLCJLCJLCJLC"
+          justify: left
   bottom_plate:
     include_keys: false
     outlines:
@@ -263,14 +283,20 @@ pcbs:
         # TODO there's a way to add stuff to the silkscreen layer
     footprints:
       mcu_l:
-        type: elitec
+        type: promicro
+        params:
+          orientation: up
+          batteryPins: true
         anchor:
           ref:
             - matrix_inner_top
           shift: [20, -11]
           rotate: 270
       mcu_r:
-        type: elitec
+        type: promicro
+        params:
+          orientation: down
+          batteryPins: true
         anchor:
           ref:
             - matrix_inner_top
@@ -338,6 +364,66 @@ pcbs:
           B: VCC
           C: GND
           D: P0
+      jumper_l:
+        type: jumper
+        anchor:
+          ref:
+            - matrix_inner_bottom
+          shift: [23.5, 0]
+          rotate: 270
+        params:
+          side: B
+        nets:
+          from: Braw
+          to: Bplus
+      jumper_r:
+        type: jumper
+        anchor:
+          ref:
+            - matrix_inner_bottom
+          shift: [23.5, 0]
+          rotate: 270
+        params:
+          side: F
+        nets:
+          from: Braw
+          to: Bplus
+      slider_l:
+        type: slider
+        anchor:
+          ref:
+            - matrix_inner_bottom
+          shift: [30, 0]
+          rotate: 270
+        params:
+          side: F
+        nets:
+          from: Braw
+          to: Bplus
+      slider_r:
+        type: slider
+        anchor:
+          ref:
+            - matrix_inner_bottom
+          shift: [30, 0]
+          rotate: 270
+        params:
+          side: B
+        nets:
+          from: Braw
+          to: Bplus
+      reset:
+        type: button
+        anchor:
+          ref:
+            - matrix_inner_bottom
+          shift: [17, 0]
+          rotate: 270
+        params:
+          variant: 2_pin_th
+        nets:
+          from: GND
+          to: RST
       info_l:
         type: text
         anchor:
@@ -345,7 +431,7 @@ pcbs:
             - matrix_pinky_bottom
           shift: [0.75 kx, 0]
         params:
-          text: "IsaacCustomTest"
+          text: "samoklava v0.1\\nby soundmonster"
           justify: left
       info_r:
         type: text
@@ -355,6 +441,6 @@ pcbs:
           shift: [0.75 kx, 0]
         params:
           layer: B.SilkS
-          text: "IsaacCustomTest"
+          text: "samoklava v0.1\\nby soundmonster"
           justify: right mirror
 
